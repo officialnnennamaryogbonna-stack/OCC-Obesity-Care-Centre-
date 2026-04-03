@@ -1,8 +1,0 @@
-{
-  "name": "OCC (Obesity Care Centre)",
-  "description": "A supportive health and wellness app for personalized guidance, meal planning, exercise support, and healthy habit tracking.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ]
-}
