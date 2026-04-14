@@ -3,7 +3,8 @@ import { UserProfile, DailyLog } from '../types';
 import { calculateBMI, cn } from '../lib/utils';
 import { OBESITY_FACTS } from '../constants';
 import { motion, AnimatePresence } from 'motion/react';
-import { Activity, TrendingUp, Scale, Droplets, Footprints, Flame, Trophy, AlertCircle, ChevronRight, Plus, Info, Camera, X, Sparkles } from 'lucide-react';
+import { Activity, TrendingUp, Scale, Droplets, Footprints, Flame, Trophy, AlertCircle, ChevronRight, Plus, Info, Camera, X, Sparkles, Check } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const MOCK_HISTORY = [
@@ -56,13 +57,49 @@ export default function Home({ profile, dailyLog, onUpdateLog, onTabChange }: Ho
 
   const toggleHabit = (habitId: string) => {
     const currentHabits = dailyLog.habits || {};
+    const isCompleting = !currentHabits[habitId];
+    
+    if (isCompleting) {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#10b981', '#34d399', '#6ee7b7']
+      });
+    }
+
     onUpdateLog({
       habits: {
         ...currentHabits,
-        [habitId]: !currentHabits[habitId]
+        [habitId]: isCompleting
       }
     });
   };
+
+  const handleToggleGoal = (goalId: string, currentStatus: boolean) => {
+    if (!currentStatus) {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#2563eb', '#3b82f6', '#60a5fa']
+      });
+    }
+    
+    if (goalId === 'workout') {
+      onUpdateLog({ workoutCompleted: !currentStatus });
+    } else if (goalId === 'water') {
+      onUpdateLog({ waterIntake: currentStatus ? 0 : 8 });
+    } else if (goalId === 'meals') {
+      onUpdateLog({ mealsLogged: currentStatus ? [] : ['m1', 'm2'] });
+    }
+  };
+
+  const goals = [
+    { id: 'workout', label: 'Morning Workout', done: dailyLog.workoutCompleted, icon: '👟' },
+    { id: 'meals', label: 'Healthy Lunch', done: dailyLog.mealsLogged.length >= 2, icon: '🥗' },
+    { id: 'water', label: '8 Glasses of Water', done: dailyLog.waterIntake >= 8, icon: '💧' },
+  ];
 
   return (
     <div className="pb-32 pt-6 px-4 sm:px-6 space-y-8 max-w-lg mx-auto">
@@ -287,20 +324,23 @@ export default function Home({ profile, dailyLog, onUpdateLog, onTabChange }: Ho
           </button>
         </div>
         <div className="space-y-3">
-          {[
-            { label: 'Morning Workout', done: dailyLog.workoutCompleted, icon: '👟' },
-            { label: 'Healthy Lunch', done: dailyLog.mealsLogged.length >= 2, icon: '🥗' },
-            { label: '8 Glasses of Water', done: dailyLog.waterIntake >= 8, icon: '💧' },
-          ].map((goal, i) => (
-            <div key={i} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
+          {goals.map((goal) => (
+            <button 
+              key={goal.id} 
+              onClick={() => handleToggleGoal(goal.id, goal.done)}
+              className="w-full bg-white p-4 rounded-2xl border border-gray-100 flex items-center justify-between active:scale-[0.98] transition-all"
+            >
+              <div className="flex items-center space-x-3 text-left">
                 <span className="text-xl">{goal.icon}</span>
                 <span className={cn("font-medium", goal.done ? "text-gray-400 line-through" : "text-gray-700")}>{goal.label}</span>
               </div>
-              <div className={cn("w-6 h-6 rounded-full border-2 flex items-center justify-center", goal.done ? "bg-green-500 border-green-500" : "border-gray-200")}>
-                {goal.done && <Plus className="w-4 h-4 text-white rotate-45" />}
+              <div className={cn(
+                "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors", 
+                goal.done ? "bg-green-500 border-green-500" : "border-gray-200"
+              )}>
+                {goal.done && <Check className="w-4 h-4 text-white" />}
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

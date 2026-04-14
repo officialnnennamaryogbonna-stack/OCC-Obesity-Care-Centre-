@@ -134,8 +134,14 @@ export const MOCK_WORKOUTS: Workout[] = [
     duration: 15,
     difficulty: "beginner",
     caloriesBurned: 50,
-    instructions: ["Neck rolls", "Shoulder stretches", "Forward fold", "Cat-cow"],
-    type: "stretching"
+    instructions: [
+      "Neck rolls: Slowly rotate your head in a circular motion for 30 seconds.",
+      "Shoulder stretches: Pull one arm across your chest and hold for 20 seconds each side.",
+      "Forward fold: Reach for your toes while keeping your knees slightly bent.",
+      "Cat-cow: On all fours, alternate between arching and rounding your back."
+    ],
+    type: "stretching",
+    image: "https://picsum.photos/seed/stretch/800/600"
   },
   {
     id: "w2",
@@ -143,8 +149,14 @@ export const MOCK_WORKOUTS: Workout[] = [
     duration: 30,
     difficulty: "beginner",
     caloriesBurned: 150,
-    instructions: ["Maintain a steady pace", "Keep back straight", "Swing arms"],
-    type: "walking"
+    instructions: [
+      "Maintain a steady pace: Walk fast enough that your heart rate increases.",
+      "Keep back straight: Look forward, not at your feet.",
+      "Swing arms: Let your arms move naturally to help with momentum.",
+      "Breathe deeply: Inhale through your nose and exhale through your mouth."
+    ],
+    type: "walking",
+    image: "https://picsum.photos/seed/walk/800/600"
   },
   {
     id: "w3",
@@ -152,8 +164,44 @@ export const MOCK_WORKOUTS: Workout[] = [
     duration: 20,
     difficulty: "intermediate",
     caloriesBurned: 250,
-    instructions: ["Jumping jacks", "Pushups", "Squats", "Plank"],
-    type: "home"
+    instructions: [
+      "Jumping jacks: 45 seconds of continuous motion, then 15 seconds rest.",
+      "Pushups: Keep your core tight and lower your chest to the floor.",
+      "Squats: Sit back as if into a chair, keeping your weight on your heels.",
+      "Plank: Hold a straight line from head to heels for 30-60 seconds."
+    ],
+    type: "home",
+    image: "https://picsum.photos/seed/hiit/800/600"
+  },
+  {
+    id: "w4",
+    title: "Core Strength",
+    duration: 15,
+    difficulty: "intermediate",
+    caloriesBurned: 120,
+    instructions: [
+      "Crunches: Lift your shoulders off the floor using your abs.",
+      "Leg raises: Slowly lower your legs without letting your lower back arch.",
+      "Russian twists: Rotate your torso from side to side while sitting.",
+      "Mountain climbers: Bring your knees to your chest in a plank position."
+    ],
+    type: "home",
+    image: "https://picsum.photos/seed/core/800/600"
+  },
+  {
+    id: "w5",
+    title: "Advanced Cardio",
+    duration: 45,
+    difficulty: "advanced",
+    caloriesBurned: 500,
+    instructions: [
+      "Burpees: From standing, drop to plank, do a pushup, and jump back up.",
+      "High knees: Run in place, bringing your knees as high as possible.",
+      "Mountain climbers: Fast-paced knee drives in a plank position.",
+      "Sprints: 30 seconds of maximum effort followed by 30 seconds rest."
+    ],
+    type: "gym",
+    image: "https://picsum.photos/seed/cardio/800/600"
   }
 ];
 

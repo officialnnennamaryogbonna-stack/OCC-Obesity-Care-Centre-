@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Play, Clock, Flame, ChevronRight, X, Dumbbell, Timer, MapPin, CheckCircle2, Sparkles } from 'lucide-react';
 import { cn } from '../lib/utils';
 import ExerciseTimer from './ExerciseTimer';
+import confetti from 'canvas-confetti';
 
 import Gyms from './Gyms';
 
@@ -30,6 +31,14 @@ export default function Fitness({ onUpdateLog, dailyLog, profile }: FitnessProps
         workoutCompleted: true
       });
     }
+    
+    confetti({
+      particleCount: 150,
+      spread: 100,
+      origin: { y: 0.6 },
+      colors: ['#2563eb', '#fbbf24', '#10b981']
+    });
+
     setShowSuccess(true);
     setTimeout(() => {
       setShowSuccess(false);
@@ -151,25 +160,39 @@ export default function Fitness({ onUpdateLog, dailyLog, profile }: FitnessProps
             />
             <motion.div
               layoutId={selectedWorkout.id}
-              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-[40px] p-8 z-[70] max-h-[80vh] overflow-y-auto"
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-[40px] z-[70] max-h-[90vh] overflow-y-auto"
             >
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">{selectedWorkout.title}</h2>
+              {/* Workout Image */}
+              <div className="relative h-48 sm:h-64 w-full">
+                <img 
+                  src={selectedWorkout.image || `https://picsum.photos/seed/${selectedWorkout.id}/800/600`} 
+                  alt={selectedWorkout.title}
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <button 
+                  onClick={() => setSelectedWorkout(null)} 
+                  className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/30 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+                <div className="absolute bottom-6 left-8 right-8">
+                  <h2 className="text-2xl font-bold text-white">{selectedWorkout.title}</h2>
                   <div className="flex items-center space-x-3 mt-1">
-                    <span className="text-blue-600 font-bold text-sm">{selectedWorkout.duration} mins</span>
-                    <span className="text-gray-300">•</span>
-                    <span className="text-orange-600 font-bold text-sm">{selectedWorkout.caloriesBurned} kcal</span>
+                    <span className="text-blue-200 font-bold text-sm">{selectedWorkout.duration} mins</span>
+                    <span className="text-white/40">•</span>
+                    <span className="text-orange-300 font-bold text-sm">{selectedWorkout.caloriesBurned} kcal</span>
                   </div>
                 </div>
-                <button onClick={() => setSelectedWorkout(null)} className="p-2 bg-gray-100 rounded-full">
-                  <X className="w-6 h-6 text-gray-500" />
-                </button>
               </div>
 
-              <div className="space-y-6">
+              <div className="p-8 space-y-6">
                 <div>
-                  <h4 className="font-bold text-gray-900 mb-4">Steps to Follow</h4>
+                  <h4 className="font-bold text-gray-900 mb-4 flex items-center">
+                    <Play className="w-4 h-4 mr-2 text-blue-600 fill-blue-600" />
+                    How to perform this workout
+                  </h4>
                   <div className="space-y-4">
                     {selectedWorkout.instructions.map((step, i) => (
                       <div key={i} className="space-y-4">

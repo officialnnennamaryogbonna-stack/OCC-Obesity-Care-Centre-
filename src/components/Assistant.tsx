@@ -105,14 +105,44 @@ export default function Assistant({ profile }: AssistantProps) {
   };
 
   const toggleMic = () => {
-    setIsListening(!isListening);
-    if (!isListening) {
-      // Mock voice recognition
-      setTimeout(() => {
-        setInput("How can I improve my water intake?");
-        setIsListening(false);
-      }, 2000);
+    if (isListening) {
+      setIsListening(false);
+      return;
     }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      console.error("Speech recognition is not supported in this browser.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = Array.from(event.results)
+        .map((result: any) => result[0])
+        .map((result: any) => result.transcript)
+        .join('');
+      setInput(transcript);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Speech recognition error", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
   return (
