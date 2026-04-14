@@ -8,9 +8,10 @@ import Community from './Community';
 
 interface SupportProps {
   profile: UserProfile;
+  onUpdateProfile: (updates: Partial<UserProfile>) => void;
 }
 
-export default function Support({ profile }: SupportProps) {
+export default function Support({ profile, onUpdateProfile }: SupportProps) {
   const [activeTab, setActiveTab] = useState<'assistant' | 'community' | 'challenges'>('assistant');
 
   const tabs = [
@@ -62,7 +63,7 @@ export default function Support({ profile }: SupportProps) {
               transition={{ duration: 0.2 }}
             >
               {/* We pass a prop or use a modified Community component that only shows chat */}
-              <Community profile={profile} initialTab="chat" hideTabs />
+              <Community profile={profile} onUpdateProfile={onUpdateProfile} initialTab="chat" hideTabs />
             </motion.div>
           )}
           {activeTab === 'challenges' && (
@@ -73,7 +74,7 @@ export default function Support({ profile }: SupportProps) {
               exit={{ opacity: 0, x: 10 }}
               transition={{ duration: 0.2 }}
             >
-              <Community profile={profile} initialTab="challenges" hideTabs />
+              <Community profile={profile} onUpdateProfile={onUpdateProfile} initialTab="challenges" hideTabs />
             </motion.div>
           )}
         </AnimatePresence>

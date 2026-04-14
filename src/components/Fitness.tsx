@@ -11,11 +11,12 @@ import Gyms from './Gyms';
 
 interface FitnessProps {
   onUpdateLog?: (updates: Partial<DailyLog>) => void;
+  onUpdateProfile: (updates: Partial<UserProfile>) => void;
   dailyLog?: DailyLog;
   profile: UserProfile;
 }
 
-export default function Fitness({ onUpdateLog, dailyLog, profile }: FitnessProps) {
+export default function Fitness({ onUpdateLog, onUpdateProfile, dailyLog, profile }: FitnessProps) {
   const [activeTab, setActiveTab] = useState<'workouts' | 'gyms'>('workouts');
   const [level, setLevel] = useState<FitnessLevel>(profile.fitnessLevel);
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
@@ -32,6 +33,8 @@ export default function Fitness({ onUpdateLog, dailyLog, profile }: FitnessProps
       });
     }
     
+    onUpdateProfile({ points: profile.points + 50 });
+
     confetti({
       particleCount: 150,
       spread: 100,

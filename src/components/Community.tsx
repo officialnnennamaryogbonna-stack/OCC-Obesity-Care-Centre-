@@ -7,11 +7,12 @@ import { cn } from '../lib/utils';
 
 interface CommunityProps {
   profile: UserProfile;
+  onUpdateProfile: (updates: Partial<UserProfile>) => void;
   initialTab?: 'chat' | 'challenges';
   hideTabs?: boolean;
 }
 
-export default function Community({ profile, initialTab = 'chat', hideTabs = false }: CommunityProps) {
+export default function Community({ profile, onUpdateProfile, initialTab = 'chat', hideTabs = false }: CommunityProps) {
   const [activeTab, setActiveTab] = useState<'chat' | 'challenges'>(initialTab);
   const [messages, setMessages] = useState<ChatMessage[]>(MOCK_CHAT_MESSAGES);
   const [newMessage, setNewMessage] = useState('');
@@ -54,6 +55,11 @@ export default function Community({ profile, initialTab = 'chat', hideTabs = fal
   const handleJoinChallenge = (id: string) => {
     if (joinedChallenges.includes(id)) return;
     
+    const challenge = MOCK_CHALLENGES.find(c => c.id === id);
+    if (challenge) {
+      onUpdateProfile({ points: profile.points + challenge.points });
+    }
+
     setJoinedChallenges([...joinedChallenges, id]);
     setShowJoinSuccess(id);
     setTimeout(() => setShowJoinSuccess(null), 2000);

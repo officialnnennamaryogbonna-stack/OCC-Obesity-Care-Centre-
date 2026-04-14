@@ -87,21 +87,32 @@ export default function App() {
   const renderContent = () => {
     switch (activeTab) {
       case 'home':
-        return <Home profile={profile} dailyLog={dailyLog} onUpdateLog={updates => setDailyLog(prev => ({ ...prev, ...updates }))} onTabChange={setActiveTab} />;
+        return <Home 
+          profile={profile} 
+          dailyLog={dailyLog} 
+          onUpdateLog={updates => setDailyLog(prev => ({ ...prev, ...updates }))} 
+          onUpdateProfile={updates => setProfile(prev => ({ ...prev, ...updates }))}
+          onTabChange={setActiveTab} 
+        />;
       case 'meals':
         return <Meals 
           onUpdateLog={updates => setDailyLog(prev => ({ ...prev, ...updates }))} 
+          onUpdateProfile={updates => setProfile(prev => ({ ...prev, ...updates }))}
           dailyLog={dailyLog}
           profile={profile}
         />;
       case 'fitness':
         return <Fitness 
           onUpdateLog={updates => setDailyLog(prev => ({ ...prev, ...updates }))} 
+          onUpdateProfile={updates => setProfile(prev => ({ ...prev, ...updates }))}
           dailyLog={dailyLog}
           profile={profile}
         />;
       case 'support':
-        return <Support profile={profile} />;
+        return <Support 
+          profile={profile} 
+          onUpdateProfile={updates => setProfile(prev => ({ ...prev, ...updates }))}
+        />;
       case 'profile':
         return <Profile profile={profile} onUpdateProfile={updates => setProfile(prev => ({ ...prev, ...updates }))} />;
       default:
@@ -109,6 +120,7 @@ export default function App() {
           profile={profile} 
           dailyLog={dailyLog} 
           onUpdateLog={updates => setDailyLog(prev => ({ ...prev, ...updates }))} 
+          onUpdateProfile={updates => setProfile(prev => ({ ...prev, ...updates }))}
           onTabChange={setActiveTab} 
         />;
     }

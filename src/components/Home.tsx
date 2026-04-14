@@ -23,10 +23,11 @@ interface HomeProps {
   profile: UserProfile;
   dailyLog: DailyLog;
   onUpdateLog: (updates: Partial<DailyLog>) => void;
+  onUpdateProfile: (updates: Partial<UserProfile>) => void;
   onTabChange: (tab: string) => void;
 }
 
-export default function Home({ profile, dailyLog, onUpdateLog, onTabChange }: HomeProps) {
+export default function Home({ profile, dailyLog, onUpdateLog, onUpdateProfile, onTabChange }: HomeProps) {
   const [showScanner, setShowScanner] = useState(false);
   const [showActivityModal, setShowActivityModal] = useState(false);
   const [showGoalsModal, setShowGoalsModal] = useState(false);
@@ -66,6 +67,7 @@ export default function Home({ profile, dailyLog, onUpdateLog, onTabChange }: Ho
         origin: { y: 0.6 },
         colors: ['#10b981', '#34d399', '#6ee7b7']
       });
+      onUpdateProfile({ points: profile.points + 5 });
     }
 
     onUpdateLog({
@@ -84,6 +86,7 @@ export default function Home({ profile, dailyLog, onUpdateLog, onTabChange }: Ho
         origin: { y: 0.6 },
         colors: ['#2563eb', '#3b82f6', '#60a5fa']
       });
+      onUpdateProfile({ points: profile.points + 10 });
     }
     
     if (goalId === 'workout') {
@@ -115,16 +118,14 @@ export default function Home({ profile, dailyLog, onUpdateLog, onTabChange }: Ho
           </div>
         </div>
         <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-1.5 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-100 shadow-sm">
+            <Trophy className="w-4 h-4 text-blue-600" />
+            <span className="font-black text-blue-600 text-sm">{profile.points}</span>
+          </div>
           <div className="flex items-center space-x-1 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-100">
             <span className="text-lg">🔥</span>
             <span className="font-bold text-orange-600 text-sm">3 Day Streak</span>
           </div>
-          <button 
-            onClick={() => setShowAchievements(true)}
-            className="bg-blue-100 p-2 rounded-full hover:bg-blue-200 transition-colors"
-          >
-            <Trophy className="w-6 h-6 text-blue-600" />
-          </button>
         </div>
       </div>
 

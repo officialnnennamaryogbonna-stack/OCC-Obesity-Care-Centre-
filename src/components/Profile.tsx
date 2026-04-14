@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserProfile } from '../types';
-import { User, Settings, Bell, Shield, Award, LogOut, ChevronRight, WifiOff, X, TrendingDown } from 'lucide-react';
+import { User, Settings, Bell, Shield, Award, LogOut, ChevronRight, WifiOff, X, TrendingDown, Trophy } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -69,7 +69,11 @@ export default function Profile({ profile, onUpdateProfile }: ProfileProps) {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{profile.name}</h1>
-          <p className="text-gray-500 text-sm">{profile.points} Points Earned</p>
+          <div className="flex items-center justify-center space-x-2 mt-1">
+            <Trophy className="w-4 h-4 text-blue-600" />
+            <p className="text-blue-600 font-black text-lg">{profile.points}</p>
+            <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">Points</p>
+          </div>
         </div>
       </div>
 

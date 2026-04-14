@@ -8,11 +8,12 @@ import MealCalendar from './MealCalendar';
 
 interface MealsProps {
   onUpdateLog: (updates: Partial<DailyLog>) => void;
+  onUpdateProfile: (updates: Partial<UserProfile>) => void;
   dailyLog: DailyLog;
   profile: UserProfile;
 }
 
-export default function Meals({ onUpdateLog, dailyLog, profile }: MealsProps) {
+export default function Meals({ onUpdateLog, onUpdateProfile, dailyLog, profile }: MealsProps) {
   const [activeTab, setActiveTab] = useState<'recipes' | 'calendar'>('recipes');
   const [filter, setFilter] = useState<string>(profile.dietaryPreference !== 'none' ? profile.dietaryPreference : 'all');
   const [selectedMeal, setSelectedMeal] = useState<Meal | null>(null);
