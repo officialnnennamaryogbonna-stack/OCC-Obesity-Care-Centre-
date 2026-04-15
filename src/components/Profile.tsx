@@ -265,7 +265,7 @@ export default function Profile({ profile, onUpdateProfile }: ProfileProps) {
       </div>
 
       <footer className="text-center pb-8 space-y-2">
-        <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">made by TWIN</p>
+        <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">made by QWIN</p>
         <p className="text-[10px] text-gray-400 font-medium">OCC v1.0.0 • Made with ❤️ for your health</p>
       </footer>
 

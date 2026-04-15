@@ -631,7 +631,7 @@ export default function Home({ profile, dailyLog, onUpdateLog, onUpdateProfile, 
       </div>
 
       <footer className="text-center pt-8 pb-4">
-        <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">made by TWIN</p>
+        <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">made by QWIN</p>
       </footer>
     </div>
   );

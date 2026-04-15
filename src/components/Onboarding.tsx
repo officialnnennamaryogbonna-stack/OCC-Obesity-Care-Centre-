@@ -89,7 +89,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             </div>
             <p className="text-gray-300 text-xs animate-pulse">Tap to continue</p>
             <div className="absolute bottom-12 right-0 text-gray-400 text-sm font-medium italic">
-              made by TWIN
+              made by QWIN
             </div>
           </div>
         );
