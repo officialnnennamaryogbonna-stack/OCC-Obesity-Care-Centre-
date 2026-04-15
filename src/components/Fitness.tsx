@@ -23,7 +23,18 @@ export default function Fitness({ onUpdateLog, onUpdateProfile, dailyLog, profil
   const [activeExerciseIndex, setActiveExerciseIndex] = useState<number | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const filteredWorkouts = MOCK_WORKOUTS.filter(w => w.difficulty === level);
+  const filteredWorkouts = [...MOCK_WORKOUTS]
+    .filter(w => w.difficulty === level)
+    .sort((a, b) => {
+      const isARecommended = (profile.mainGoal === 'activity' && a.duration > 30) ||
+                             (profile.mainGoal === 'weight-loss' && a.caloriesBurned >= 200);
+      const isBRecommended = (profile.mainGoal === 'activity' && b.duration > 30) ||
+                             (profile.mainGoal === 'weight-loss' && b.caloriesBurned >= 200);
+      
+      if (isARecommended && !isBRecommended) return -1;
+      if (!isARecommended && isBRecommended) return 1;
+      return 0;
+    });
 
   const handleCompleteWorkout = (workout: Workout) => {
     if (onUpdateLog && dailyLog) {
@@ -109,7 +120,7 @@ export default function Fitness({ onUpdateLog, onUpdateProfile, dailyLog, profil
           {/* Workout List */}
           <div className="space-y-4">
             {filteredWorkouts.map(workout => {
-              const isRecommended = (profile.mainGoal === 'activity' && workout.duration >= 30) ||
+              const isRecommended = (profile.mainGoal === 'activity' && workout.duration > 30) ||
                                    (profile.mainGoal === 'weight-loss' && workout.caloriesBurned >= 200);
 
               return (
