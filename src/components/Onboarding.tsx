@@ -16,7 +16,6 @@ const STEPS = [
   { id: 'intro2', title: 'Move Well', icon: Logo },
   { id: 'intro3', title: 'Feel Great', icon: Logo },
   { id: 'auth_choice', title: 'Welcome', icon: User },
-  { id: 'login', title: 'Welcome Back', icon: User },
   { id: 'basics', title: 'Create Account', icon: User },
   { id: 'lifestyle', title: 'Your Lifestyle', icon: Activity },
 ];
@@ -125,13 +124,13 @@ export default function Onboarding({ onComplete, profile: savedProfile }: Onboar
             </div>
             <div className="flex flex-col space-y-3">
               <button 
-                onClick={() => setStep(6)} 
+                onClick={() => setStep(5)} 
                 className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200"
               >
                 Create Account
               </button>
               <button 
-                onClick={() => setStep(5)} 
+                onClick={() => onComplete({ ...profile, onboarded: true })}
                 className="w-full bg-white text-blue-600 py-4 rounded-2xl font-bold border border-blue-100"
               >
                 Login
@@ -140,113 +139,7 @@ export default function Onboarding({ onComplete, profile: savedProfile }: Onboar
             <p className="text-xs text-gray-400">By continuing, you agree to our Terms and Conditions.</p>
           </div>
         );
-      case 5: // Login Screen
-        return (
-          <div className="text-center space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold text-gray-900">Welcome Back</h2>
-              <p className="text-gray-500 text-sm">Sign in to continue your journey.</p>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="space-y-2 text-left">
-                <label className="text-xs font-bold text-gray-400 uppercase ml-2">Email Address</label>
-                <input 
-                  type="email" 
-                  placeholder="name@example.com"
-                  className="w-full bg-white border border-gray-100 rounded-2xl p-4 text-sm focus:ring-2 focus:ring-blue-600 outline-none"
-                />
-              </div>
-              <div className="space-y-2 text-left">
-                <label className="text-xs font-bold text-gray-400 uppercase ml-2">Password</label>
-                <input 
-                  type="password" 
-                  placeholder="••••••••"
-                  className="w-full bg-white border border-gray-100 rounded-2xl p-4 text-sm focus:ring-2 focus:ring-blue-600 outline-none"
-                />
-              </div>
-              <div className="text-right">
-                <button 
-                  onClick={() => setShowForgotPassword(true)}
-                  className="text-xs font-bold text-blue-600 hover:text-blue-700"
-                >
-                  Forgot Password?
-                </button>
-              </div>
-              {loginError && (
-                <p className="text-red-500 text-xs font-bold bg-red-50 p-3 rounded-xl animate-shake">
-                  {loginError}
-                </p>
-              )}
-            </div>
-
-            <div className="flex flex-col space-y-3">
-              <button 
-                onClick={() => {
-                  if (savedProfile && savedProfile.name) {
-                    onComplete({ ...savedProfile, onboarded: true });
-                  } else {
-                    setLoginError('No account found. Please click "Sign Up" to create one.');
-                  }
-                }}
-                className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200"
-              >
-                Sign In
-              </button>
-              <button 
-                onClick={() => {
-                  setStep(4);
-                  setLoginError('');
-                }}
-                className="w-full bg-white text-gray-500 py-4 rounded-2xl font-bold border border-gray-100"
-              >
-                Back
-              </button>
-            </div>
-
-            <p className="text-xs text-gray-400">
-              Don't have an account? <button onClick={() => { setStep(6); setLoginError(''); }} className="text-blue-600 font-bold">Sign Up</button>
-            </p>
-
-            <AnimatePresence>
-              {showForgotPassword && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-6"
-                >
-                  <div className="bg-white w-full max-w-sm rounded-[32px] p-8 space-y-6">
-                    <div className="text-center space-y-2">
-                      <h3 className="text-xl font-black text-gray-900">Reset Password</h3>
-                      <p className="text-sm text-gray-500">Enter your email and we'll send you instructions.</p>
-                    </div>
-                    <input 
-                      type="email" 
-                      placeholder="name@example.com"
-                      className="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm"
-                    />
-                    <div className="flex flex-col space-y-3">
-                      <button 
-                        onClick={() => setShowForgotPassword(false)}
-                        className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold"
-                      >
-                        Send Reset Link
-                      </button>
-                      <button 
-                        onClick={() => setShowForgotPassword(false)}
-                        className="w-full text-gray-400 font-bold"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        );
-      case 6: // Basics
+      case 5: // Basics
         return (
           <div className="space-y-4">
             <h3 className="text-xl font-semibold mb-4">Personal Details</h3>
@@ -307,7 +200,7 @@ export default function Onboarding({ onComplete, profile: savedProfile }: Onboar
             </div>
           </div>
         );
-      case 7: // Lifestyle
+      case 6: // Lifestyle
         return (
           <div className="space-y-4">
             <h3 className="text-xl font-semibold mb-4">Your Lifestyle</h3>
@@ -394,10 +287,10 @@ export default function Onboarding({ onComplete, profile: savedProfile }: Onboar
       </div>
 
       <div className="mt-8 max-w-md mx-auto w-full">
-        {step >= 6 && (
+        {step >= 5 && (
           <button
             onClick={nextStep}
-            disabled={step === 6 && !profile.name}
+            disabled={step === 5 && !profile.name}
             className="w-full bg-blue-600 text-white py-4 rounded-2xl font-semibold flex items-center justify-center space-x-2 hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span>{step === STEPS.length - 1 ? 'Finish Setup' : 'Continue'}</span>
