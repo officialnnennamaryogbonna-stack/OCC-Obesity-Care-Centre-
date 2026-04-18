@@ -7,42 +7,25 @@ import Logo from './Logo';
 
 interface OnboardingProps {
   onComplete: (profile: UserProfile) => void;
+  profile: UserProfile;
 }
 
 const STEPS = [
   { id: 'splash', title: 'OCC', icon: Logo },
+  { id: 'intro1', title: 'Eat Smart', icon: Logo },
+  { id: 'intro2', title: 'Move Well', icon: Logo },
+  { id: 'intro3', title: 'Feel Great', icon: Logo },
+  { id: 'auth_choice', title: 'Welcome', icon: User },
   { id: 'login', title: 'Welcome Back', icon: User },
-  { id: 'welcome_intro', title: 'Welcome to Obesity Care Centre', icon: User },
-  { id: 'basics', title: 'The Basics', icon: User },
+  { id: 'basics', title: 'Create Account', icon: User },
   { id: 'lifestyle', title: 'Your Lifestyle', icon: Activity },
-  { id: 'goals', title: 'Your Goals', icon: Target },
-  { id: 'reminders', title: 'Stay on Track', icon: Settings },
 ];
 
-export default function Onboarding({ onComplete }: OnboardingProps) {
+export default function Onboarding({ onComplete, profile: savedProfile }: OnboardingProps) {
   const [step, setStep] = useState(0);
-  const [profile, setProfile] = useState<UserProfile>({
-    name: '',
-    age: 25,
-    height: 170,
-    weight: 80,
-    gender: 'male',
-    activityLevel: 'moderate',
-    fitnessLevel: 'beginner',
-    dietaryPreference: 'none',
-    mainGoal: 'habits',
-    reminderPreferences: {
-      water: true,
-      meals: true,
-      exercise: true,
-      sleep: true,
-      checkins: true,
-    },
-    points: 0,
-    badges: [],
-    onboarded: false,
-    offlineMode: false,
-  });
+  const [loginError, setLoginError] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [profile, setProfile] = useState<UserProfile>(savedProfile);
 
   const nextStep = () => {
     if (step < STEPS.length - 1) setStep(step + 1);
@@ -59,7 +42,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
   const renderStep = () => {
     switch (step) {
-      case 0: // Splash Screen (Sketch 1)
+      case 0: // Splash Screen
         return (
           <div 
             onClick={nextStep}
@@ -73,27 +56,91 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               <h3 className="text-xl font-bold text-gray-700">Obesity Care Centre</h3>
               <p className="text-blue-600 font-medium italic">Eat smart, move well, feel great.</p>
             </div>
-            <div className="flex flex-col space-y-3 pt-4 w-full">
-              <button 
-                onClick={() => setStep(2)} 
-                className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200"
-              >
-                Get Started
-              </button>
-              <button 
-                onClick={() => setStep(1)} 
-                className="w-full bg-white text-blue-600 py-4 rounded-2xl font-bold border border-blue-100"
-              >
-                Sign In
-              </button>
-            </div>
             <p className="text-gray-300 text-xs animate-pulse">Tap to continue</p>
             <div className="absolute bottom-12 right-0 text-gray-400 text-sm font-medium italic">
               made by QWIN
             </div>
           </div>
         );
-      case 1: // Login Screen
+      case 1: // Intro 1
+        return (
+          <div className="text-center space-y-8">
+            <div className="w-64 h-64 bg-blue-50 rounded-full mx-auto flex items-center justify-center">
+              <span className="text-7xl">🥗</span>
+            </div>
+            <div className="space-y-4">
+              <h2 className="text-3xl font-black text-gray-900">Personalized Nutrition</h2>
+              <p className="text-gray-500 leading-relaxed">
+                Discover meal plans tailored specifically to your body type and fitness goals. No generic advice.
+              </p>
+            </div>
+            <button onClick={nextStep} className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">
+              Next
+            </button>
+          </div>
+        );
+      case 2: // Intro 2
+        return (
+          <div className="text-center space-y-8">
+            <div className="w-64 h-64 bg-blue-50 rounded-full mx-auto flex items-center justify-center">
+              <span className="text-7xl">👟</span>
+            </div>
+            <div className="space-y-4">
+              <h2 className="text-3xl font-black text-gray-900">Smart Habit Building</h2>
+              <p className="text-gray-500 leading-relaxed">
+                Build sustainable routines with our daily trackers. Consistency is the key to long-term health.
+              </p>
+            </div>
+            <button onClick={nextStep} className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">
+              Next
+            </button>
+          </div>
+        );
+      case 3: // Intro 3
+        return (
+          <div className="text-center space-y-8">
+            <div className="w-64 h-64 bg-blue-50 rounded-full mx-auto flex items-center justify-center">
+              <span className="text-7xl">💪</span>
+            </div>
+            <div className="space-y-4">
+              <h2 className="text-3xl font-black text-gray-900">Fitness Reimagined</h2>
+              <p className="text-gray-500 leading-relaxed">
+                Access guided workouts designed to reduce obesity-related risks and improve your vitality.
+              </p>
+            </div>
+            <button onClick={nextStep} className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">
+              Let's Start
+            </button>
+          </div>
+        );
+      case 4: // Auth Choice (Login/Sign Up)
+        return (
+          <div className="text-center space-y-8">
+            <div className="w-20 h-20 bg-blue-600 rounded-3xl mx-auto flex items-center justify-center text-white p-4 shadow-xl shadow-blue-100">
+              <Logo />
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-2xl font-black text-gray-900">Join OCC Today</h2>
+              <p className="text-gray-500">Your journey to a better you starts here.</p>
+            </div>
+            <div className="flex flex-col space-y-3">
+              <button 
+                onClick={() => setStep(6)} 
+                className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200"
+              >
+                Create Account
+              </button>
+              <button 
+                onClick={() => setStep(5)} 
+                className="w-full bg-white text-blue-600 py-4 rounded-2xl font-bold border border-blue-100"
+              >
+                Login
+              </button>
+            </div>
+            <p className="text-xs text-gray-400">By continuing, you agree to our Terms and Conditions.</p>
+          </div>
+        );
+      case 5: // Login Screen
         return (
           <div className="text-center space-y-8">
             <div className="space-y-2">
@@ -118,17 +165,39 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   className="w-full bg-white border border-gray-100 rounded-2xl p-4 text-sm focus:ring-2 focus:ring-blue-600 outline-none"
                 />
               </div>
+              <div className="text-right">
+                <button 
+                  onClick={() => setShowForgotPassword(true)}
+                  className="text-xs font-bold text-blue-600 hover:text-blue-700"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+              {loginError && (
+                <p className="text-red-500 text-xs font-bold bg-red-50 p-3 rounded-xl animate-shake">
+                  {loginError}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col space-y-3">
               <button 
-                onClick={() => onComplete({ ...profile, onboarded: true })}
+                onClick={() => {
+                  if (savedProfile && savedProfile.name) {
+                    onComplete({ ...savedProfile, onboarded: true });
+                  } else {
+                    setLoginError('No account found. Please click "Sign Up" to create one.');
+                  }
+                }}
                 className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200"
               >
                 Sign In
               </button>
               <button 
-                onClick={() => setStep(0)}
+                onClick={() => {
+                  setStep(4);
+                  setLoginError('');
+                }}
                 className="w-full bg-white text-gray-500 py-4 rounded-2xl font-bold border border-gray-100"
               >
                 Back
@@ -136,67 +205,48 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             </div>
 
             <p className="text-xs text-gray-400">
-              Don't have an account? <button onClick={() => setStep(2)} className="text-blue-600 font-bold">Sign Up</button>
+              Don't have an account? <button onClick={() => { setStep(6); setLoginError(''); }} className="text-blue-600 font-bold">Sign Up</button>
             </p>
-          </div>
-        );
-      case 2: // Welcome Intro (Sketch 2)
-        return (
-          <div className="text-center space-y-6">
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold text-gray-900">Welcome to Obesity Care Centre</h2>
-              <p className="text-gray-500">Helping you to lead a healthier life.</p>
-            </div>
-            
-            <div className="relative w-64 h-64 mx-auto">
-              {/* Central Illustration Concept */}
-              <div className="absolute inset-0 bg-blue-50 rounded-full animate-pulse" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <User className="w-32 h-32 text-blue-200" />
-              </div>
-              
-              {/* Floating Icons from Sketch */}
-              <motion.div 
-                animate={{ y: [0, -10, 0] }} 
-                transition={{ repeat: Infinity, duration: 3 }}
-                className="absolute top-0 left-0 w-12 h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center text-xl"
-              >
-                🍎
-              </motion.div>
-              <motion.div 
-                animate={{ y: [0, 10, 0] }} 
-                transition={{ repeat: Infinity, duration: 4 }}
-                className="absolute top-10 right-0 w-12 h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center text-xl"
-              >
-                👟
-              </motion.div>
-              <motion.div 
-                animate={{ x: [0, -10, 0] }} 
-                transition={{ repeat: Infinity, duration: 3.5 }}
-                className="absolute bottom-10 left-0 w-12 h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center text-xl"
-              >
-                📝
-              </motion.div>
-              <motion.div 
-                animate={{ scale: [1, 1.1, 1] }} 
-                transition={{ repeat: Infinity, duration: 2 }}
-                className="absolute bottom-0 right-10 w-12 h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center text-xl"
-              >
-                ❤️
-              </motion.div>
-            </div>
 
-            <div className="flex flex-col space-y-3 pt-4">
-              <button onClick={nextStep} className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200">
-                Get Started
-              </button>
-              <button className="w-full bg-white text-gray-500 py-4 rounded-2xl font-bold border border-gray-100">
-                Learn More
-              </button>
-            </div>
+            <AnimatePresence>
+              {showForgotPassword && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+                >
+                  <div className="bg-white w-full max-w-sm rounded-[32px] p-8 space-y-6">
+                    <div className="text-center space-y-2">
+                      <h3 className="text-xl font-black text-gray-900">Reset Password</h3>
+                      <p className="text-sm text-gray-500">Enter your email and we'll send you instructions.</p>
+                    </div>
+                    <input 
+                      type="email" 
+                      placeholder="name@example.com"
+                      className="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm"
+                    />
+                    <div className="flex flex-col space-y-3">
+                      <button 
+                        onClick={() => setShowForgotPassword(false)}
+                        className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold"
+                      >
+                        Send Reset Link
+                      </button>
+                      <button 
+                        onClick={() => setShowForgotPassword(false)}
+                        className="w-full text-gray-400 font-bold"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         );
-      case 2:
+      case 6: // Basics
         return (
           <div className="space-y-4">
             <h3 className="text-xl font-semibold mb-4">Personal Details</h3>
@@ -257,7 +307,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             </div>
           </div>
         );
-      case 2:
+      case 7: // Lifestyle
         return (
           <div className="space-y-4">
             <h3 className="text-xl font-semibold mb-4">Your Lifestyle</h3>
@@ -306,82 +356,6 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             </div>
           </div>
         );
-      case 3:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold mb-4">What's your main goal?</h3>
-            <div className="grid grid-cols-1 gap-3">
-              {[
-                { id: 'habits', label: 'Build healthier eating habits', icon: '🥗' },
-                { id: 'activity', label: 'Increase physical activity', icon: '🏃' },
-                { id: 'consistency', label: 'Improve consistency', icon: '📅' },
-                { id: 'weight-loss', label: 'Gradually manage weight', icon: '⚖️' },
-                { id: 'maintain', label: 'Maintain current weight', icon: '💪' },
-              ].map(goal => (
-                <button
-                  key={goal.id}
-                  onClick={() => updateProfile({ mainGoal: goal.id as HealthGoal })}
-                  className={`flex items-center p-4 rounded-xl border transition-all ${
-                    profile.mainGoal === goal.id
-                      ? 'bg-blue-50 border-blue-500 text-blue-700'
-                      : 'bg-white border-gray-200 text-gray-700 hover:border-blue-300'
-                  }`}
-                >
-                  <span className="text-2xl mr-4">{goal.icon}</span>
-                  <span className="font-medium">{goal.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        );
-      case 4:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold mb-4">Reminder Preferences</h3>
-            <div className="space-y-3">
-              {[
-                { id: 'water', label: 'Drink Water', icon: '💧' },
-                { id: 'meals', label: 'Eat on Time', icon: '🍽️' },
-                { id: 'exercise', label: 'Exercise', icon: '👟' },
-                { id: 'sleep', label: 'Sleep', icon: '🌙' },
-                { id: 'checkins', label: 'Healthy Check-ins', icon: '✅' },
-              ].map(rem => (
-                <div
-                  key={rem.id}
-                  className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl"
-                >
-                  <div className="flex items-center">
-                    <span className="text-2xl mr-4">{rem.icon}</span>
-                    <span className="font-medium text-gray-700">{rem.label}</span>
-                  </div>
-                  <button
-                    onClick={() =>
-                      updateProfile({
-                        reminderPreferences: {
-                          ...profile.reminderPreferences,
-                          [rem.id]: !profile.reminderPreferences[rem.id as keyof typeof profile.reminderPreferences],
-                        },
-                      })
-                    }
-                    className={`w-12 h-6 rounded-full transition-colors relative ${
-                      profile.reminderPreferences[rem.id as keyof typeof profile.reminderPreferences]
-                        ? 'bg-blue-600'
-                        : 'bg-gray-300'
-                    }`}
-                  >
-                    <div
-                      className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${
-                        profile.reminderPreferences[rem.id as keyof typeof profile.reminderPreferences]
-                          ? 'left-7'
-                          : 'left-1'
-                      }`}
-                    />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
       default:
         return null;
     }
@@ -400,7 +374,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             />
           ))}
         </div>
-        <button onClick={prevStep} className={`p-2 text-gray-400 ${step === 0 ? 'invisible' : ''}`}>
+        <button onClick={prevStep} className={`p-2 text-gray-400 ${(step === 0 || step === 4) ? 'invisible' : ''}`}>
           <ChevronLeft className="w-6 h-6" />
         </button>
       </div>
@@ -420,10 +394,10 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       </div>
 
       <div className="mt-8 max-w-md mx-auto w-full">
-        {step > 1 && (
+        {step >= 6 && (
           <button
             onClick={nextStep}
-            disabled={step === 2 && !profile.name}
+            disabled={step === 6 && !profile.name}
             className="w-full bg-blue-600 text-white py-4 rounded-2xl font-semibold flex items-center justify-center space-x-2 hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span>{step === STEPS.length - 1 ? 'Finish Setup' : 'Continue'}</span>

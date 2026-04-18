@@ -81,7 +81,7 @@ export default function App() {
   }
 
   if (!profile.onboarded) {
-    return <Onboarding onComplete={setProfile} />;
+    return <Onboarding onComplete={setProfile} profile={profile} />;
   }
 
   const renderContent = () => {
